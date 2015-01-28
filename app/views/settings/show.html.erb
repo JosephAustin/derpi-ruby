@@ -1,0 +1,18 @@
+<% def list(title, field, original) %>
+	<h2><%= title %></h2>
+	<% original.each do |tag| %>
+		<%= tag %>
+		<br>
+	<% end %>
+	<%= form_tag settings_apply_path do %>
+		<%= hidden_field_tag :field, field %>
+		<%= text_field_tag :new_tag %>
+		<%= submit_tag "Add" %>
+	<% end %>
+<% end %>
+
+<% list("Best Tags", :best_tags, @best) %>
+<% list("Good Tags", :good_tags, @good) %>
+<% list("Bad Tags", :bad_tags, @bad) %>
+<% list("Worst Tags", :worst_tags, @worst) %>
+<% list("File Tags", :file_tags, @file) %>

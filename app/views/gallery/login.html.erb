@@ -1,0 +1,9 @@
+<center>
+	You need to provide an API key from Derpibooru to proceed.
+	<%= form_tag gallery_login_user_path do %>
+		<center>
+			<%= text_field_tag :key %>
+			<%= submit_tag "Use Key" %>
+		</center>
+	<% end %>
+</center>

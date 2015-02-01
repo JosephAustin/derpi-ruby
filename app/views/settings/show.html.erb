@@ -1,7 +1,8 @@
 <% def list(title, field, original) %>
 	<h2><%= title %></h2>
 	<% original.each do |tag| %>
-		<%= tag %>
+		<div style="float: left; width: auto;"><%= tag %></div> 
+		<%= button_to "X", { :action => "delete", :target => tag, :field => field }, :method => :post %>
 		<br>
 	<% end %>
 	<%= form_tag settings_apply_path do %>

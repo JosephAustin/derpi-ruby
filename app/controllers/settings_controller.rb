@@ -25,4 +25,17 @@ class SettingsController < ApplicationController
       redirect_to settings_show_path
     end
   end
+  
+  def delete
+    if (user = current_user) && params[:target] && params[:field]
+      previous = user[params[:field]]
+      if previous
+        list = previous.split(",")
+        list.delete params[:target]
+        user[params[:field]] = list.join(",")
+        user.save
+      end
+    end
+    redirect_to settings_show_path
+  end
 end

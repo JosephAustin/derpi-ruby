@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   
   get 'settings/show'
   post 'settings/apply'
+  post 'settings/delete'
 end

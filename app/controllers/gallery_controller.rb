@@ -62,6 +62,20 @@ class GalleryController < ApplicationController
     end
   end
   
+  def apply_tags
+    # Do the tagging
+    if user = current_user
+      tag_ids(user.id, params[:checked_ids]) if params[:checked_ids]
+    end
+    
+    # Appropriately refresh
+    if(params[:page])
+      redirect_to search_path(page: params[:page], search_query: eval(params[:search_query]) )
+    else
+      redirect_to images_path(params)
+    end
+  end
+  
   def login
     if request.post?
       cookies[:key] = params[:key]
@@ -90,25 +104,21 @@ class GalleryController < ApplicationController
   # fill them out.
   def get_thumbnails(user, min, max, error)
     thumbs = []
+    
+     ###########################################
+    
+    
     thumbs
   end
   
   # Search for thumbnails by query, at a certain page.
   def get_thumbnails(user, query, page, error)
     thumbs = []
+    
+    ###########################################
+    
+    
     thumbs
-  end
-  
-  
-  
-  
-  
-  
-  def apply_tags
-    if user = current_user
-      tag_ids(user.id, params[:checked_ids]) if params[:checked_ids]
-      redirect_to gallery_index_path({:min => params[:min], :max => params[:max]})
-    end
   end
   
   # Tag an array of IDs in the database for a single user
@@ -119,6 +129,11 @@ class GalleryController < ApplicationController
       queries.each { |query| TaggedItems.create query unless TaggedItems.find_by query }
     end
   end
+  
+  
+  
+  
+  
   
   
   

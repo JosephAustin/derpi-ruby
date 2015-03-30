@@ -1,4 +1,16 @@
 
+<style>
+	#highlight {
+		border:4px solid #FF00FF;
+		opacity:1
+	}
+	#redlight {
+		border:6px solid #FF0000;
+		opacity:1
+	}
+</style>
+
+
 <% 	# Display an error message if one is provided, otherwise resume with the usual display
 	if @error %>
 		<center>
@@ -30,6 +42,59 @@
 				<%= link_to '<- Back', images_path(min: (@max.to_i + 1).to_s) %>
 				<%= link_to 'Next ->', images_path(max: (@min.to_i - 1).to_s) %>
 			</center>
+		<% end %>
+		
+		<%
+		# Create the thumbnail links with their checkboxes
+		%>
+		<%= form_tag tag_path() do %>
+			<table>
+				<tr>
+					<% col = 0 %>
+					<% @thumbs.each do |thumb| %>
+						<td>
+							<a href="https:<%= thumb[:link] %>" onclick="check(<%= thumb[:id] %>)">
+								<center>
+									<img id='<%= thumb[:css_id] %>' src="https:<%= thumb[:thumb] %>">
+								</center>
+							</a>
+		                    <div style='text-align: center;'>
+		                		<%= check_box_tag "checked_ids[]", thumb[:id], thumb[:check] unless thumb[:tagged] %>
+		                    	<a href="https://derpiboo.ru/<%= thumb[:id] %>"><%= thumb[:id] %></a>
+		                    </div>
+						</td>
+						
+						<% col += 1 %>
+				    	<% if col >= 5 %>
+				  			</tr><tr>
+				  			<% col = 0 %>
+						<% end %>
+					<% end	%>
+				</tr>
+			</table>
+			
+			
+			<%
+			# Return all the correct variables for the page refresh
+			%>
+			<% if @page %>
+				<%= hidden_field_tag :page, @page %>
+				<%= hidden_field_tag :search_query, {keyword: @query} %>
+			<% else %>
+				<%= hidden_field_tag :min, @min %>
+				<%= hidden_field_tag :max, @max %>
+			<% end %>
+						
+			<%
+			# Allow mass checking and unchecking
+			%>
+			<center>
+				<button type="button" onclick="check_all()">
+				    Check / Uncheck All
+				</button>
+			</center>
+			
+			<%= submit_tag "Mark Checked Thumbnails" %>
 		<% end %>
 	</center>
 <% end %>

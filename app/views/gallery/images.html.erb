@@ -1,0 +1,35 @@
+
+<% 	# Display an error message if one is provided, otherwise resume with the usual display
+	if @error %>
+		<center>
+			<br>
+			<h2><%= @error %></h2>
+		</center>
+<% else %>
+	<center> 
+		<% # Two types of scenareos: search by page and query, or search by minimum and maximum ID 
+		if @page %>
+			<!-- Page header  -->
+			<h2> Page <%= @page %></h2> 
+			
+			<%	# Create the next and back buttons
+			%>
+			<center>
+				<% if @page != "1" %>
+					<%= link_to '<- Back', search_path(page: (@page.to_i - 1).to_s, search_query: {keyword: @query}), method: :post %>
+				<% end %>
+				<%= link_to 'Next ->', search_path(page: (@page.to_i + 1).to_s, search_query: {keyword: @query}), method: :post %>
+			</center>
+		<% else %>
+			<!-- Page header  -->
+			<h2> <%= @max %> to <%= @min %> </h2> 
+			
+			<%	# Create the next and back buttons
+			%>
+			<center>
+				<%= link_to '<- Back', images_path(min: (@max.to_i + 1).to_s) %>
+				<%= link_to 'Next ->', images_path(max: (@min.to_i - 1).to_s) %>
+			</center>
+		<% end %>
+	</center>
+<% end %>

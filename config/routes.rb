@@ -7,7 +7,6 @@ Rails.application.routes.draw do
   
   get 'images', to: 'gallery#images'
   post 'search', to: 'gallery#search'
-  get 'search', to: 'gallery#search'
   
   get 'settings', to: 'settings#show'
   post 'settings/apply'

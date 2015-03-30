@@ -8,18 +8,51 @@ class GalleryController < ApplicationController
   def images
     user = current_user
     if user
+      @min = params[:min] || ""
+      @max = params[:max] || ""
       
+      # Find the thumbs to be rendered. If the resulting list is empty, try again without min or max ids,
+      # which means reset to the beginning.
+      @thumbs = get_thumbnails(user, @min, @max, @error)
+      unless @error
+        if(@thumbs.empty?)
+          @min = @max = ""
+          @thumbs = get_thumbnails(user, @min, @max, @error)
+        end
+      end
     else
       # No user key entered, go to login
       redirect_to login_path
     end
   end
   
-  def search    
+  def search
     user = current_user
     if user
-      if request.post?
+      # Get the search query
+      query_field = params[:search_query]
+      @query = nil
+      if(query_field && query_field.is_a?(Hash))
+        @query = query_field[:keyword]
+      end
+      
+      # If the query was supplied, perform the search
+      if(@query && (@query.length > 0))
+        @page = params[:page] || "1"
         
+        # Find the thumbs to be rendered. If the resulting list is empty, go to first page
+        @thumbs = get_thumbnails(user, @query, @page, @error)
+        unless @error
+          if(@thumbs.empty?)
+            page = "1"
+            @thumbs = get_thumbnails(user, @query, @page, @error)
+          end
+        end
+
+        render 'images'
+      # Otherwise, go back to images
+      else
+        redirect_to images_path
       end
     else
       # No user key entered, go to login
@@ -48,8 +81,15 @@ class GalleryController < ApplicationController
     redirect_to root_path
   end
   
+  def get_thumbnails(user, min, max, error)
+    thumbs = []
+    thumbs
+  end
   
-  
+  def get_thumbnails(user, query, page, error)
+    thumbs = []
+    thumbs
+  end
   
   
   

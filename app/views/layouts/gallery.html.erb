@@ -9,17 +9,19 @@
 <body>
 	<table width="100%">
 		<tr>
-			<td>
+			<td width="10%">
 				<%= link_to "Images", images_path %>
 			</td>
-			<td>
+			<td width="80%">
 				<%= form_for(:query, url: search_path) do |f| %>
-					<%= f.label("Search:") %>
-					<%= f.text_field :keyword %>
-					<%= f.submit "Submit" %>
+					<center>
+						<%= f.label("Search:") %>
+						<%= f.text_field :keyword, :size => "50%" %>
+						<%= f.submit "Submit" %>
+					</center>
 				<% end %>
 			</td>
-			<td align="right">
+			<td align="right" width="10%">
 				<%= link_to "Settings", settings_path %>
 				<%= link_to "Logout", logout_path, method: :post %>
 			</td>

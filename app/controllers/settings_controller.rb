@@ -22,7 +22,7 @@ class SettingsController < ApplicationController
       end
 
       user.save
-      redirect_to settings_show_path
+      redirect_to settings_path
     end
   end
   
@@ -36,6 +36,7 @@ class SettingsController < ApplicationController
         user.save
       end
     end
-    redirect_to settings_show_path
+    redirect_to settings_path
   end
 end
+

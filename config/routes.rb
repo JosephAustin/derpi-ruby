@@ -1,13 +1,15 @@
 Rails.application.routes.draw do
-  root 'gallery#index'
+  root 'gallery#login'
   
-  get 'gallery/index'
-  get 'gallery/login'
-  post 'gallery/login_user'
-  post 'gallery/apply_tags'
-  post 'gallery/import_tags'
+  get 'login', to: 'gallery#login'
+  post 'login', to: 'gallery#login'
+  post 'logout', to: 'gallery#logout'
   
-  get 'settings/show'
+  get 'images', to: 'gallery#images'
+  post 'search', to: 'gallery#search'
+  get 'search', to: 'gallery#search'
+  
+  get 'settings', to: 'settings#show'
   post 'settings/apply'
   post 'settings/delete'
 end

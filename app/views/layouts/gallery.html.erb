@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Derp</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+	<table width="100%">
+		<tr>
+			<td>
+				<%= link_to "Images", images_path %>
+			</td>
+			<td>
+				<%= form_for(:query, url: search_path) do |f| %>
+					<%= f.label("Search:") %>
+					<%= f.text_field :keyword %>
+					<%= f.submit "Submit" %>
+				<% end %>
+			</td>
+			<td align="right">
+				<%= link_to "Settings", settings_path %>
+				<%= link_to "Logout", logout_path, method: :post %>
+			</td>
+		</tr>
+	</table>
+<%= yield %>
+
+</body>
+</html>

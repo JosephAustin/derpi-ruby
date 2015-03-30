@@ -7,24 +7,9 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  
+    
+  include ApplicationHelper
   protected
-  
-  def current_user
-    user = nil
-    
-    if (cookies[:key].nil?) || (cookies[:key].empty?)
-      redirect_to gallery_login_path
-    else
-      user = UserKeys.find_by key: cookies[:key]
-      if user.nil?
-        user = UserKeys.new(key: cookies[:key])
-        user.save
-      end
-    end
-    
-    user
-  end
   
   # Tag an array of IDs in the database for a single user
   def tag_ids(user_id, image_ids)

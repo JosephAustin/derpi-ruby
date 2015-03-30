@@ -5,6 +5,56 @@ require 'json'
 require 'net/http'
 
 class GalleryController < ApplicationController
+  def images
+    user = current_user
+    if user
+      
+    else
+      # No user key entered, go to login
+      redirect_to login_path
+    end
+  end
+  
+  def search    
+    user = current_user
+    if user
+      if request.post?
+        
+      end
+    else
+      # No user key entered, go to login
+      redirect_to login_path
+    end
+  end
+  
+  def login
+    if request.post?
+      cookies[:key] = params[:key]
+      redirect_to images_path
+    else
+      user = current_user
+      
+      # Go to images page if already logged in for a key
+      if user
+        redirect_to images_path
+      else
+        render :layout => 'application'
+      end
+    end
+  end
+  
+  def logout
+    cookies[:key] = nil
+    redirect_to root_path
+  end
+  
+  
+  
+  
+  
+  
+  
+  
   def index
     if user = current_user
       # RESTful state options

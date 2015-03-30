@@ -5,6 +5,8 @@ require 'json'
 require 'net/http'
 
 class GalleryController < ApplicationController
+  public
+  
   def images
     user = current_user
     if user
@@ -81,11 +83,17 @@ class GalleryController < ApplicationController
     redirect_to root_path
   end
   
+  
+  private
+    
+  # Search for thumbnails from an images query. If min and max arent both provided, this will
+  # fill them out.
   def get_thumbnails(user, min, max, error)
     thumbs = []
     thumbs
   end
   
+  # Search for thumbnails by query, at a certain page.
   def get_thumbnails(user, query, page, error)
     thumbs = []
     thumbs
@@ -95,28 +103,6 @@ class GalleryController < ApplicationController
   
   
   
-  def index
-    if user = current_user
-      # RESTful state options
-      @rest = {}
-      @rest[:min] = params[:min] || ""            # Minimum ID displayed
-      @rest[:max] = params[:max] || ""            # Maximum ID displayed
-      @job_completion = check_for_jobs(user.id)   # Whether user is busy now
-      
-      # Get the thumbs to be rendered. If the list is empty, try again without min or max ids
-      thumb_list = get_thumb_listing(@rest, user.id, @message, user)
-      if thumb_list.empty?
-        @rest[:min] = @rest[:max] = ""
-        thumb_list = get_thumb_listing(@rest, user.id, @message, user)
-      end
-      @thumbs = thumb_list
-    end
-  end
-  
-  def login_user
-    cookies[:key] = params[:key]
-    redirect_to gallery_index_path
-  end
   
   def apply_tags
     if user = current_user
@@ -125,16 +111,16 @@ class GalleryController < ApplicationController
     end
   end
   
-  def import_tags
-    if user = current_user
-      # If a file was uploaded, start the transfer to database
-      id_file = params[:id_file]
-      tag_ids_large(user.id, id_file.read.split("\n")) if id_file && id_file.respond_to?(:read)        
-      redirect_to gallery_index_path
+  # Tag an array of IDs in the database for a single user
+  def tag_ids(user_id, image_ids)
+    queries = []
+    image_ids.each { |img_id| queries << {:belongs_to => user_id, :image_id => img_id.to_i } }
+    ActiveRecord::Base.transaction do
+      queries.each { |query| TaggedItems.create query unless TaggedItems.find_by query }
     end
   end
   
-  private
+  
   
   # The design is meant to scan our database first and use min or max id constraints to put less weight on the website while doing this.
   def get_thumb_listing(data, user_id, error, user)

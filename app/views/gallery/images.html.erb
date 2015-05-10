@@ -39,8 +39,8 @@
 			<%	# Create the next and back buttons
 			%>
 			<center>
-				<%= link_to '<- Back', images_path(min: (@max.to_i + 1).to_s) %>
-				<%= link_to 'Next ->', images_path(max: (@min.to_i - 1).to_s) %>
+				<%= link_to '<-- Back', images_path(min: (@max.to_i + 1).to_s) %>
+				<%= link_to 'Next -->', images_path(max: (@min.to_i - 1).to_s) %>
 			</center>
 		<% end %>
 		
@@ -81,7 +81,6 @@
 				<%= hidden_field_tag :page, @page %>
 				<%= hidden_field_tag :search_query, {keyword: @query} %>
 			<% else %>
-				<%= hidden_field_tag :min, @min %>
 				<%= hidden_field_tag :max, @max %>
 			<% end %>
 						

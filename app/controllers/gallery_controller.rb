@@ -222,7 +222,7 @@ class GalleryController < ApplicationController
     page_thumbs = []
   
     # Make sure we get a reply
-    response = make_request(basic_request + "&q=#{query}", error)        
+    response = make_request(basic_request + "&q=#{query}", error)
     if response 
       # Parse the response for thumbnails
       page_thumbs = json_to_thumbnails(user, JSON.parse(response.body))
@@ -256,18 +256,16 @@ class GalleryController < ApplicationController
     http.read_timeout = 20
     http.use_ssl = true
     attempts = 1
-    
     # Limit attempts so we dont annoy Derpibooru too badly
     response = nil
     while (attempts < 4) && response.nil?
       begin
-        response = http.request_get(uri)
+        response = http.request_get(uri.request_uri)
       rescue
         sleep(attempts * 2)
         attempts += 1
       end
     end
-
     error = "Could not get a response from Derpibooru. Wait a few minutes and try again." unless response    
     response
   end

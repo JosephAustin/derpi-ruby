@@ -130,8 +130,11 @@ class GalleryController < ApplicationController
         # Make sure we get a reply
         response = make_request(basic_request + parameters, error)
         if response
+          parsed_data = JSON.parse(response.body)
+          images = parsed_data["images"]
+          
           # Parse the response for thumbnails
-          page_thumbs = json_to_thumbnails(user, JSON.parse(response.body))
+          page_thumbs = json_to_thumbnails(user, images)
           
           # When no min and max were set, we are starting from the most recent; therefore begin with the very first image descending
           @max = page_thumbs[0][:id].to_i unless @min || @max
@@ -304,7 +307,7 @@ class GalleryController < ApplicationController
         thumbs << {:id => id, :link => link, :thumb => thumb}.merge(data)
       end
     end
-        
+ 
     thumbs
   end
   

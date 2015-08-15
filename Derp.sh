@@ -1,4 +1,4 @@
-cd "/SPACE/Stuff/DEVEL/Derp"
+cd "/SPACE/Development/derpi-ruby"
 
 # Destroy existing rails servers
 if [ `cat ./tmp/pids/server.pid` -ne 0 ]

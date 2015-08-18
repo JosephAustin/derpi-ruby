@@ -75,7 +75,7 @@ class GalleryController < ApplicationController
     if(params[:page])
       redirect_to search_path(page: params[:page], search_query: eval(params[:search_query]) )
     else
-      redirect_to images_path(params)
+      redirect_to images_path(params.select {|k,v| k == "min" || k == "max"})
     end
   end
   

@@ -31,7 +31,6 @@ ActiveRecord::Schema.define(version: 20150928060230) do
   create_table "users", force: :cascade do |t|
     t.string "key"
     t.text   "best_tags"
-    t.text   "text"
     t.text   "bad_tags"
     t.text   "good_tags"
     t.text   "worst_tags"

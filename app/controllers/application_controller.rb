@@ -1,11 +1,10 @@
 # Primary application controller
 # Written 2015 by Joseph Austin
 
-class ApplicationController < ActionController::Base  
+class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-    
-  include ApplicationHelper
+  
+  include LoginHelper
 end
-

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TaggedItemsTest < ActiveSupport::TestCase
+class HiddenImageTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

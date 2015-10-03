@@ -13,13 +13,15 @@
 				<%= link_to "Images", images_path %>
 			</td>
 			<td width="80%">
-				<%= form_for(:search_query, url: search_path) do |f| %>
-					<center>
-						<%= f.label("Search:") %>
-						<%= f.text_field :keyword, :value => @query, :size => "50%" %>
-						<%= f.submit "Submit" %>
-					</center>
-				<% end %>
+        <% if false %>
+  				<%= form_for(:search_query, url: search_path) do |f| %>
+  					<center>
+  						<%= f.label("Search:") %>
+  						<%= f.text_field :keyword, :value => @query, :size => "50%" %>
+  						<%= f.submit "Submit" %>
+  					</center>
+  				<% end %>
+        <% end %>
 			</td>
 			<td align="right" width="10%">
 				<%= link_to "Settings", settings_path %>

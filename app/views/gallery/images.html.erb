@@ -1,4 +1,3 @@
-
 <style>
 	#highlight {
 		border:4px solid #FF00FF;
@@ -10,7 +9,6 @@
 	}
 </style>
 
-
 <% 	# Display an error message if one is provided, otherwise resume with the usual display
 	if @error %>
 		<center>
@@ -18,52 +16,34 @@
 			<h2><%= @error %></h2>
 		</center>
 <% else %>
-	<center> 
-		<% # Two types of scenareos: search by page and query, or search by minimum and maximum ID 
-		if @page %>
-			<!-- Page header  -->
-			<h2> Page <%= @page %></h2> 
-			
-			<%	# Create the next and back buttons
-			%>
+	<center>
+			<h2> Current Range: <%= @min %> to <%= @max %> </h2>
+
+			<%	# Create the next and back buttons %>
 			<center>
-				<% if @page != "1" %>
-					<%= link_to '<- Back', search_path(page: (@page.to_i - 1).to_s, search_query: {keyword: @query}), method: :post %>
-				<% end %>
-				<%= link_to 'Next ->', search_path(page: (@page.to_i + 1).to_s, search_query: {keyword: @query}), method: :post %>
-			</center>
-		<% else %>
-			<!-- Page header  -->
-			<h2> <%= @max %> to <%= @min %> </h2> 
-			
-			<%	# Create the next and back buttons
-			%>
-			<center>
-				<%= link_to '<-- Back', images_path(min: (@max.to_i + 1).to_s) %>
-				<%= link_to 'Next -->', images_path(max: (@min.to_i - 1).to_s) %>
+				<%= link_to '< Back', images_path(min: (@max.to_i + 1).to_s) %>
+				<%= link_to 'Next >', images_path(max: (@min.to_i - 1).to_s) %>
 			</center>
 		<% end %>
-		
-		<%
-		# Create the thumbnail links with their checkboxes
-		%>
-		<%= form_tag tag_path() do %>
+
+		<% # Create the thumbnail links with their checkboxes %>
+		<%= form_tag hide_path() do %>
 			<table>
 				<tr>
 					<% col = 0 %>
-					<% @thumbs.each do |thumb| %>
+					<% @images.each do |image| %>
 						<td>
-							<a href="https:<%= thumb[:link] %>" onclick="check(<%= thumb[:id] %>)">
+							<a href="https:<%= image[:direct_link] %>" onclick="check(<%= image[:indexer] %>)">
 								<center>
-									<img id='<%= thumb[:css_id] %>' src="https:<%= thumb[:thumb] %>">
+									<img id="<%= image[:css_id] %>" src="https:<%= image[:thumb_link] %>">
 								</center>
 							</a>
-		                    <div style='text-align: center;'>
-		                		<%= check_box_tag "checked_ids[]", thumb[:id], thumb[:check] unless thumb[:tagged] %>
-		                    	<a href="https://derpiboo.ru/<%= thumb[:id] %>"><%= thumb[:id] %></a>
-		                    </div>
+              <div style='text-align: center;'>
+          			<%= check_box_tag "checked_images[]", image[:indexer], image[:checked] %>
+              	<a href="https://derpiboo.ru/<%= image[:indexer] %>"><%= image[:indexer] %></a>
+              </div>
 						</td>
-						
+
 						<% col += 1 %>
 				    	<% if col >= 5 %>
 				  			</tr><tr>
@@ -72,28 +52,21 @@
 					<% end	%>
 				</tr>
 			</table>
-			
-			
-			<%
-			# Return all the correct variables for the page refresh
-			%>
-			<% if @page %>
-				<%= hidden_field_tag :page, @page %>
-				<%= hidden_field_tag :search_query, {keyword: @query} %>
-			<% else %>
-				<%= hidden_field_tag :max, @max %>
-			<% end %>
-						
-			<%
-			# Allow mass checking and unchecking
-			%>
+
+			<% # For reloading the page correctly again %>
+			<%= hidden_field_tag :max, @max %>
+
+			<% # Allow mass checking and unchecking %>
 			<center>
 				<button type="button" onclick="check_all()">
 				    Check / Uncheck All
 				</button>
 			</center>
-			
-			<%= submit_tag "Mark Checked Thumbnails" %>
+
+			<%= submit_tag "Hide Checked Thumbnails" %>
 		<% end %>
+
+		<%	# Create the next and back buttons again to save scrolling %>
+		<%= link_to '< Back', images_path(min: (@max.to_i + 1).to_s) %>
+		<%= link_to 'Next >', images_path(max: (@min.to_i - 1).to_s) %>
 	</center>
-<% end %>

@@ -33,7 +33,7 @@
 					<% col = 0 %>
 					<% @images.each do |image| %>
 						<td>
-							<a href="https:<%= image[:direct_link] %>" onclick="check(<%= image[:indexer] %>)">
+							<a href="https:/<%= image[:direct_link] %>" onclick="check(<%= image[:indexer] %>)">
 								<center>
 									<img id="<%= image[:css_id] %>" src="https:<%= image[:thumb_link] %>">
 								</center>

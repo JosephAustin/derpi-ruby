@@ -6,7 +6,7 @@ require 'net/http'
 
 class GalleryController < ApplicationController
   REQUEST_STRING = "images.json?deleted=true&constraint=id" # Generic images request
-  THUMBS_PER_PAGE = 100
+  THUMBS_PER_PAGE = 50
 
   # GET /images
   # Display the current page of images between a minimum or maximum
@@ -26,12 +26,12 @@ class GalleryController < ApplicationController
         # css_id: Id for css used when displaying the image
 
       # Minimum and maximum indexers of the images that are returned
-      @min = 0
-      @max = 0
+      @min = nil
+      @max = nil
 
       # Only allow one direction between min and max
-      min = params[:min].to_i
-      max = params[:max].to_i
+      min = params[:min] ? params[:min].to_i : nil
+      max = params[:max] ? params[:max].to_i : nil
       min = max = nil if min && max
 
       begin
@@ -69,16 +69,16 @@ class GalleryController < ApplicationController
 
         # Now we must process these images for the view
         images.each do |image|
-          unless(image.dead || user.discarded?(image.id))
+          unless(image.dead || user.discarded?(image))
             @images << process_image(user, image)
           end
         end
       end while (images.length > 0) && (@images.length < THUMBS_PER_PAGE)
 
       # Compute final minimum and maximum values of the final thumbnails
-      range = (images.collect {|x| x.indexer.to_i}).sort
-      @min = range.first.to_s
-      @max = range.last.to_s
+      range = @images.collect {|x| x[:indexer].to_i}
+      @min = range.min
+      @max = range.max
     else
       # Nope - not logged in!
       redirect_to root_path

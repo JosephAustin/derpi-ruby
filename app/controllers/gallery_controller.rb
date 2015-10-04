@@ -60,11 +60,14 @@ class GalleryController < ApplicationController
           end
           # Update min and max for the images we just covered so another set can be requested as needed
           sorted_images = images.sort { |x, y| x.indexer.to_i <=> y.indexer.to_i}
-          if min
-            min = sorted_images.last.indexer.to_i + 1
-          else
-            max = sorted_images.first.indexer.to_i - 1
-          end
+
+		  if sorted_images.length > 0
+		    if min
+              min = sorted_images.last.indexer.to_i + 1
+            else
+              max = sorted_images.first.indexer.to_i - 1
+            end
+		  end
         end
 
         # Now we must process these images for the view

@@ -46,7 +46,7 @@ class GalleryController < ApplicationController
               max -= 1 if max
               images << databased_image
             end
-          end while databased_image
+          end while databased_image && (@images.length + images.length) < THUMBS_PER_PAGE
         end
 
         # If we haven't reached our desired thumbnail count, ask derpibooru for more

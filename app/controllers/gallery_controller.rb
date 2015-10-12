@@ -38,7 +38,7 @@ class GalleryController < ApplicationController
         images = []; # This is used only for each individual loop
 
         # Skim through images already databased
-        if min ^ max
+        if (not min.nil?) ^ (not max.nil?)
           begin
             databased_image = Image.where(indexer: min ? min : max).first
             if databased_image
@@ -78,6 +78,12 @@ class GalleryController < ApplicationController
         end
       end while (images.length > 0) && (@images.length < THUMBS_PER_PAGE)
 
+      # We've safely databased, but limit the amount of images on the page to reduce confusion.
+	  @images = @images[0 .. (THUMBS_PER_PAGE - 1)]
+
+	  # Reverse them when going backwards so the order stays the same
+      @images.reverse! unless min.nil?
+
       # Compute final minimum and maximum values of the final thumbnails
       range = @images.collect {|x| x[:indexer].to_i}
       @min = range.min
@@ -100,15 +106,16 @@ class GalleryController < ApplicationController
       checked_images = params[:checked_images]
       max = params[:max]
 
-      ActiveRecord::Base.transaction do
-        checked_images.each do |indexer|
-          databased_image = Image.where(indexer: indexer).first
-          if databased_image
-            HiddenImage.where(image_id: databased_image.id, user_id: user.id).first_or_create
-          end
-        end
-      end
-
+	  if checked_images
+		  ActiveRecord::Base.transaction do
+		    checked_images.each do |indexer|
+		      databased_image = Image.where(indexer: indexer).first
+		      if databased_image
+		        HiddenImage.where(image_id: databased_image.id, user_id: user.id).first_or_create
+		      end
+		    end
+		  end
+	  end
       redirect_to images_path max: max
     else
       # Nope - not logged in!
